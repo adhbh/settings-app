@@ -19,11 +19,24 @@ export default React.createClass({
             React.PropTypes.array,
             React.PropTypes.object,
         ]),
+        includeEmpty: React.PropTypes.bool,
+        emptyLabel: React.PropTypes.string,
     },
 
     mixins: [MuiThemeMixin],
 
+    getDefaultProps() {
+        return {
+            includeEmpty: false,
+            emptyLabel: '',
+        };
+    },
+
     renderMenuItems(menuItems) {
+        if (this.props.includeEmpty) {
+            menuItems.unshift(menuItems.length > 0 && !!menuItems[0].id ? {id: 'null', displayName: this.props.emptyLabel} : {payload: 'null', text: this.props.emptyLabel});
+        }
+
         if (!!menuItems) {
             return menuItems.map(item => {
                 return !!item.id ?
